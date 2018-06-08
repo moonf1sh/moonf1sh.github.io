@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -257,7 +257,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-08T09:20:35+08:00">
                 2018-06-08
@@ -315,7 +315,7 @@
 </code></pre><p>admin_news.php 中使用include包含该文件</p>
 <p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片4.png" alt=""></p>
 <p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片5.png" alt=""></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$numPerPage=20;</span><br><span class="line">if(empty($order)) $order=&quot;n_addtime&quot;;  //$order的值不为空</span><br><span class="line">$orderStr= &quot; order by d.$order desc&quot;; // d拼接$order</span><br><span class="line">$page = isset($page) ? intval($page) : 1;</span><br><span class="line">if($page==0) $page=1;</span><br><span class="line">$whereStr=&quot;  &quot;;</span><br><span class="line">if ($action==&quot;nullpic&quot;) $whereStr.=&quot; and d.v_pic=&apos;&apos;&quot;;</span><br><span class="line">if ($n_recycled==&quot;ok&quot;) $whereStr.=&quot; and d.n_recycled=1&quot;;</span><br><span class="line">if (!empty($type)) $whereStr.=&quot; and d.tid in (&quot;.getTypeId($type).&quot;)&quot;;</span><br><span class="line">if (!empty($keyword)) $whereStr.=&quot; and d.n_title like &apos;%&quot;.$keyword.&quot;%&apos;&quot;;</span><br><span class="line">$whereorder = str_replace(&quot;where order&quot;,&quot;order&quot;,str_replace(&quot;where and&quot;,&quot;and&quot;,$whereStr.$orderStr)); //$whereorder 即为&quot;  order by d.$order desc&quot;</span><br><span class="line">$csqlStr=&quot;select count(*) as dd from `sea_news` d where d.n_recycled=0 &quot;.$whereorder; //第一处拼接查询语句</span><br><span class="line">if ($n_recycled==&quot;ok&quot;)$csqlStr=&quot;select count(*) as dd from `sea_news` d where d.n_recycled=1 &quot;.$whereorder;</span><br><span class="line">$row = $dsql-&gt;GetOne($csqlStr); 执行</span><br><span class="line">if(is_array($row))&#123;</span><br><span class="line">$TotalResult = $row[&apos;dd&apos;];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">$TotalResult = 0;</span><br><span class="line">&#125;</span><br><span class="line">$TotalPage = ceil($TotalResult/$numPerPage);</span><br><span class="line">if ($page&gt;$TotalPage) $page=$TotalPage;</span><br><span class="line">$limitstart = ($page-1) * $numPerPage;</span><br><span class="line">if($limitstart&lt;0) $limitstart=0;</span><br><span class="line">$sqlStr=&quot;select d.n_id,d.n_title,d.n_hit,0,d.tid,d.n_addtime,d.n_commend,t.tname from sea_news d left join `sea_type` t on t.tid=d.tid where d.n_recycled=0 &quot;.$whereorder.&quot; limit $limitstart,$numPerPage&quot;; //第二处拼接查询语句</span><br><span class="line">if ($n_recycled==&quot;ok&quot;) $sqlStr=&quot;select d.n_id,d.n_title,d.n_hit,0,d.tid,d.n_addtime,d.n_commend,t.tname from sea_news d left join `sea_type` t on t.tid=d.tid  where 1=1 &quot;.$whereorder.&quot; limit $limitstart,$numPerPage&quot;;</span><br><span class="line">//echo $sqlStr;die();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$numPerPage=20;</span><br><span class="line">if(empty($order)) $order=&quot;n_addtime&quot;;  //$order的值不为空</span><br><span class="line">$orderStr= &quot; order by d.$order desc&quot;; // d拼接$order</span><br><span class="line">$page = isset($page) ? intval($page) : 1;</span><br><span class="line">if($page==0) $page=1;</span><br><span class="line">$whereStr=&quot;  &quot;;</span><br><span class="line">if ($action==&quot;nullpic&quot;) $whereStr.=&quot; and d.v_pic=&apos;&apos;&quot;;</span><br><span class="line">if ($n_recycled==&quot;ok&quot;) $whereStr.=&quot; and d.n_recycled=1&quot;;</span><br><span class="line">if (!empty($type)) $whereStr.=&quot; and d.tid in (&quot;.getTypeId($type).&quot;)&quot;;</span><br><span class="line">if (!empty($keyword)) $whereStr.=&quot; and d.n_title like &apos;%&quot;.$keyword.&quot;%&apos;&quot;;</span><br><span class="line">$whereorder = str_replace(&quot;where order&quot;,&quot;order&quot;,str_replace(&quot;where and&quot;,&quot;and&quot;,$whereStr.$orderStr)); //$whereorder 即为&quot;  order by d.$order desc&quot;</span><br><span class="line">$csqlStr=&quot;select count(*) as dd from `sea_news` d where d.n_recycled=0 &quot;.$whereorder; //第一处拼接查询语句</span><br><span class="line">if ($n_recycled==&quot;ok&quot;)$csqlStr=&quot;select count(*) as dd from `sea_news` d where d.n_recycled=1 &quot;.$whereorder;</span><br><span class="line">$row = $dsql-&gt;GetOne($csqlStr); 进入GetOne</span><br><span class="line">if(is_array($row))&#123;</span><br><span class="line">$TotalResult = $row[&apos;dd&apos;];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">$TotalResult = 0;</span><br><span class="line">&#125;</span><br><span class="line">$TotalPage = ceil($TotalResult/$numPerPage);</span><br><span class="line">if ($page&gt;$TotalPage) $page=$TotalPage;</span><br><span class="line">$limitstart = ($page-1) * $numPerPage;</span><br><span class="line">if($limitstart&lt;0) $limitstart=0;</span><br><span class="line">$sqlStr=&quot;select d.n_id,d.n_title,d.n_hit,0,d.tid,d.n_addtime,d.n_commend,t.tname from sea_news d left join `sea_type` t on t.tid=d.tid where d.n_recycled=0 &quot;.$whereorder.&quot; limit $limitstart,$numPerPage&quot;; //第二处拼接查询语句</span><br><span class="line">if ($n_recycled==&quot;ok&quot;) $sqlStr=&quot;select d.n_id,d.n_title,d.n_hit,0,d.tid,d.n_addtime,d.n_commend,t.tname from sea_news d left join `sea_type` t on t.tid=d.tid  where 1=1 &quot;.$whereorder.&quot; limit $limitstart,$numPerPage&quot;;</span><br><span class="line">//echo $sqlStr;die();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
 <p>跟进GetOne()</p>
 <pre><code>seacmsV6.61\include\sql.class.php
 </code></pre><p>主要是看Execute()</p>
@@ -404,7 +404,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-01T14:37:51+08:00">
                 2018-06-01
@@ -532,7 +532,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-11T14:11:09+08:00">
                 2018-05-11
@@ -661,7 +661,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-18T00:56:16+08:00">
                 2017-12-18
@@ -808,7 +808,7 @@
                 <a href="/archives/">
               
                   <span class="site-state-item-count">4</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -860,7 +860,7 @@
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
