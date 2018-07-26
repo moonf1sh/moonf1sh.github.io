@@ -88,7 +88,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/05/PocScan-无法加载bugscan插件的解决办法/init.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/05/PocScan-无法加载bugscan插件的解决办法/test.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/05/PocScan-无法加载bugscan插件的解决办法/result.png">
-<meta property="og:updated_time" content="2018-07-08T22:22:05.644Z">
+<meta property="og:updated_time" content="2018-07-25T09:15:13.783Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PocScan 无法加载bugscan插件的解决办法">
 <meta name="twitter:description" content="最近想写一个插件式扫描器，顺便研究了一下PocScan https://github.com/erevus-cn/pocscan/ 这个扫描器刚开源的时候很火，记得之前众测的时候还有公司将它部署到生产环境上，开了Debug信息。 在项目的Issues多次提到不兼容问题，但是一直没有修复，所以就看一下问题出在哪里。 加载bugscan插件后扫了一下自己的VPS，查看日志之后发现payload是发过来">
@@ -311,7 +311,7 @@
 <p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/init.png" alt=""></p>
 <p>这个地方有两个bug：</p>
 <ul>
-<li>这里传入的参数是个tuple，所以只是用*args就可以了。</li>
+<li>这里传入的参数用*args就可以了</li>
 <li>作者的本意是获取log中的url，事实上在旧版的插件中并不返回log,log 是新插件中hackhttp函数返回的</li>
 </ul>
 <p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/test.png" alt=""></p>

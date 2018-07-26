@@ -308,7 +308,7 @@
 <p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/init.png" alt=""></p>
 <p>这个地方有两个bug：</p>
 <ul>
-<li>这里传入的参数是个tuple，所以只是用*args就可以了。</li>
+<li>这里传入的参数用*args就可以了</li>
 <li>作者的本意是获取log中的url，事实上在旧版的插件中并不返回log,log 是新插件中hackhttp函数返回的</li>
 </ul>
 <p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/test.png" alt=""></p>
