@@ -88,7 +88,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/05/PocScan-无法加载bugscan插件的解决办法/init.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/05/PocScan-无法加载bugscan插件的解决办法/test.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/05/PocScan-无法加载bugscan插件的解决办法/result.png">
-<meta property="og:updated_time" content="2018-07-25T09:15:13.783Z">
+<meta property="og:updated_time" content="2018-10-16T02:49:02.151Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="PocScan 无法加载bugscan插件的解决办法">
 <meta name="twitter:description" content="最近想写一个插件式扫描器，顺便研究了一下PocScan https://github.com/erevus-cn/pocscan/ 这个扫描器刚开源的时候很火，记得之前众测的时候还有公司将它部署到生产环境上，开了Debug信息。 在项目的Issues多次提到不兼容问题，但是一直没有修复，所以就看一下问题出在哪里。 加载bugscan插件后扫了一下自己的VPS，查看日志之后发现payload是发过来">
@@ -188,7 +188,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -198,7 +198,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -262,7 +262,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-05T17:03:33+08:00">
                 2018-07-05
@@ -308,8 +308,12 @@
 <p>在项目的Issues多次提到不兼容问题，但是一直没有修复，所以就看一下问题出在哪里。</p>
 <p>加载bugscan插件后扫了一下自己的VPS，查看日志之后发现payload是发过来了，说明是结果存储反馈的过程除了问题。</p>
 <p>文件 <code>/pocscan/blob/master/pocscan/plugins/bugscan/dummy/__init__.py</code></p>
-<p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/init.png" alt=""></p>
-<p>这个地方有两个bug：</p>
+<pre><code>def _problem(*args, **kwargs):
+    # 从栈里取poc名字
+    import inspect
+    poc_name =  inspect.stack()[1][1]
+    log = kwargs[&apos;log&apos;]
+</code></pre><p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/init.png" alt=""></p>
 <ul>
 <li>这里传入的参数用*args就可以了</li>
 <li>作者的本意是获取log中的url，事实上在旧版的插件中并不返回log,log 是新插件中hackhttp函数返回的</li>
@@ -317,14 +321,15 @@
 <p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/test.png" alt=""></p>
 <p>简单粗暴直接将38行修改成</p>
 <pre><code>def _problem(*args):
-# 从栈里取poc名字
-import inspect
-poc_name = inspect.stack()[1][1]
-result = [&apos;note&apos;, &apos;info&apos;, &apos;warning&apos;, &apos;hole&apos;][args[0]]
-save_result(args[1], poc_name, result + &apos;: &apos;+poc_name)
+    # 从栈里取poc名字
+    import inspect
+    poc_name = inspect.stack()[1][1]
+    result = [&apos;note&apos;, &apos;info&apos;, &apos;warning&apos;, &apos;hole&apos;][args[0]]
+    save_result(args[1], poc_name, result + &apos;: &apos;+poc_name)
 </code></pre><p>扫描一下看结果：</p>
 <p><img src="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/result.png" alt=""></p>
 <p>总结：这个扫描器从学习的角度来讲具有借鉴意义，但并不适合部署使用。</p>
+<p>后续我会写一下我的插件式扫描器的开发过程，在此立个flag。</p>
 
       
     </div>
@@ -426,7 +431,7 @@ save_result(args[1], poc_name, result + &apos;: &apos;+poc_name)
                 <a href="/archives/">
               
                   <span class="site-state-item-count">5</span>
-                  <span class="site-state-item-name">posts</span>
+                  <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
             
@@ -478,7 +483,7 @@ save_result(args[1], poc_name, result + &apos;: &apos;+poc_name)
 </div>
 
 
-  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
 
 
