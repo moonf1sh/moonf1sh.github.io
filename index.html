@@ -299,7 +299,7 @@
       
         
           
-            <p>  六月份提交给先知的漏洞，不过重复了<br>  版本信息：<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/version.png" alt="image"><br>  注入点：<code>http://localhost/dedecms/v57/dede/co_do.php?clshash=true&amp;dopost=clear&amp;ids=*</code><br>  根据我们hook的函数发现payload直接进入查询语句<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/hook.png" alt="image"><br>sleep(1)<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sleep1.png" alt="image"><br>sleep(2)<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sleep2.png" alt="image"><br>sqlmap测试<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sqlmap.png" alt="image"><br>定位到<code>.\dede\co_do.php</code>文件中当$ids和$clshash不为空时，$ids直接拼接到查询语句执行<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/code.png" alt="image"><br>IAST是个有趣的工具，还是需要不断研究的。</p>
+            <p>  六月份提交给先知的漏洞，不过重复了<br>  版本信息：<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/version.png" alt="image"><br>  注入点：<code>http://localhost/dedecms/v57/dede/co_do.php?clshash=true&amp;dopost=clear&amp;ids=*</code><br>  根据我们hook的函数发现payload直接进入查询语句<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/hook.png" alt="image"><br>sleep(1)<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sleep1.png" alt="image"><br>sleep(5)<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sleep2.png" alt="image"><br>sqlmap测试<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sqlmap.png" alt="image"><br>定位到<code>.\dede\co_do.php</code>文件中当$ids和$clshash不为空时，$ids直接拼接到查询语句执行<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/code.png" alt="image"><br>IAST是个有趣的工具，还是需要不断研究的。</p>
 
           
         
