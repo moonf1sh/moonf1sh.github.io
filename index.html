@@ -780,6 +780,148 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/18/IAST简述/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="moonfish">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Moonfish's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/12/18/IAST简述/" itemprop="url">IAST简述</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-18T00:56:16+08:00">
+                2017-12-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>IAST（Interactive Application Security Testing)-交互式应用安全测试。2012年由gartner公司提出，其博客 <a href="https://blogs.gartner.com/neil_macdonald/2012/01/30/interactive-application-security-testing/" target="_blank" rel="noopener">Interactive Application Security Testing</a> 对IAST的定义是：<br><code>Specifically, we are looking for ways that application security testing solutions combine dynamic and static techniques to improve the overall quality of the testing results. The information gathered by this instrumentation agent gives the hybrid solution an inside-out view that complements the outside-in view of a purely DAST solution — for example, identifying the specific line of code where a security vulnerability occurred, or providing detailed visibility into code coverage.</code></p>
+<p>大意是结合动态（DAST）和静态(SAST)扫描的方式提高扫描结果的质量.通过插桩的方式收集应用内部的信息，从而弥补纯DAST扫描的不足，比如确定漏洞发生的代码行数或者提供一个详细的可视化的代码范围。<br>IAST = DAST(Dynamic Application Security Testing) + SAST(Static Application Security Testing)</p>
+<p>DAST：动态扫描，即黑盒扫描，如AWVS，APPSCAN，检测运行时的应用<br><img src="/2017/12/18/IAST简述/dast.png" alt=""><br>SAST: 静态扫描，即白盒扫描，如RIPS，Fortify，代码层面的漏洞检测<br><img src="/2017/12/18/IAST简述/sast.png" alt=""></p>
+<h3 id="IAST的两种模式"><a href="#IAST的两种模式" class="headerlink" title="IAST的两种模式"></a>IAST的两种模式</h3><h4 id="Active-IAST-Induced-IAST"><a href="#Active-IAST-Induced-IAST" class="headerlink" title="Active IAST(Induced IAST)"></a>Active IAST(Induced IAST)</h4><p>这种模式的检测能力需要一个外部的扫描器去触发应用内部的agent，简单来说，它可以检测到DAST检测不到的漏洞。比如说，一个无法回显或无法被DAST检测的漏洞可以被Active IAST发现，然后与DAST进行交互，从而判断攻击是否成功，同时通过追踪变量，精确定位漏洞代码的位置。不过这个模式有个缺点，DAST扫描去触发漏洞需要一定的时间，同时黑盒扫描器也需要去配置和维护，所以并不推荐在CI\CD 和 DevOps环境中使用。<br><img src="/2017/12/18/IAST简述/active.png" alt=""><br>相关安全产品<br><img src="/2017/12/18/IAST简述/active-iast.png" alt=""><br>AWVS acusensor<br><img src="/2017/12/18/IAST简述/awvs.png" alt=""><br>BURP infiltrator<br><img src="/2017/12/18/IAST简述/infiltrator_issue.png" alt=""></p>
+<h4 id="Passive-IAST-Self-Sufficient"><a href="#Passive-IAST-Self-Sufficient" class="headerlink" title="Passive IAST(Self Sufficient)"></a>Passive IAST(Self Sufficient)</h4><p>Passive IAST 也需要一个插桩到测试应用中的agent，但这个agent是独立的，可以在应用运行时被动地监听和分析代码，通过扫描运行中的代码查找漏洞。Passive IAST并不攻击应用，所以它并不会干扰其他的安全测试活动，只要普通的业务测试（手工或自动的访问）就可以进行安全测试。当有人（或工具）对应用进行测试时，IAST会分析数据流，从而找到潜在的漏洞，并上报到控制台。<br><img src="/2017/12/18/IAST简述/passive.png" alt=""><br>360skywolf<br><img src="/2017/12/18/IAST简述/skywolf.png" alt=""><br>contrast security<br><img src="/2017/12/18/IAST简述/contrast.png" alt=""></p>
+<h3 id="agent收集的信息"><a href="#agent收集的信息" class="headerlink" title="agent收集的信息"></a>agent收集的信息</h3><ul>
+<li>请求数据和返回数据</li>
+<li>代码执行中的参数传递</li>
+<li>数据库查询（如ODBC），目录查询（如LDAP），文件系统权限</li>
+<li>运行时字符的操作（字符合并分割）</li>
+<li>监听内存中特定的值，识别受污染的输入</li>
+<li>三方库的使用</li>
+<li>对外部应用程序或服务的调用</li>
+<li>特定代码行的执行</li>
+<li>……..</li>
+</ul>
+<h3 id="IAST的特点"><a href="#IAST的特点" class="headerlink" title="IAST的特点"></a>IAST的特点</h3><ul>
+<li>误报率低<br>IAST定位到漏洞代码行数，从而清除误报。</li>
+<li>测试时间短<br>探针可以跟踪变量参数的传递（数据库、文件操作等），然后控制台针对这些操作做出相关的攻击测试</li>
+<li>支持JAVA,.NET,Node.js,PHP,Python等语言开发的WEB应用</li>
+<li>即时反馈</li>
+</ul>
+<p>参考：<br><a href="https://blog.secodis.com/2015/11/26/the-emerge-of-iast/" target="_blank" rel="noopener">https://blog.secodis.com/2015/11/26/the-emerge-of-iast/</a><br><a href="https://dzone.com/articles/ciso-how-to-own-your-applications-security" target="_blank" rel="noopener">https://dzone.com/articles/ciso-how-to-own-your-applications-security</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/16/Host-Header欺骗在密码找回中的利用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -852,7 +994,11 @@
         
           
             <p>看到了一篇国外的blog，分享了一个找回密码功能中利用<code>$_SERVER[&#39;HTTP_HOST&#39;]</code>窃取token的姿势，本来我以为是email header injection，后来发现不是。雨神在他的blog <a href="http://www.yulegeyu.com/2017/04/24/%E4%B8%BA%E4%BB%80%E4%B9%88$_SERVER[&#39;HTTP_HOST&#39;]%E6%9C%89%E6%97%B6%E6%98%AF%E4%B8%8D%E5%8F%AF%E6%8E%A7%E7%9A%84%E3%80%82/" target="_blank" rel="noopener">为什么<code>$_SERVER[&#39;HTTP_HOST&#39;]</code>有时是不可控的 </a>中就提到<code>$_SERVER[&#39;HTTP_HOST&#39;]</code>是可控的：<br><code>一些同学会以为HTTP的联机就是靠包里的HOST header来连接的,所以会认为如果修改掉包里的HOST, 那么就连接不到目标服务器,所以是不可控的。
-其实HTTP的联机与包里的HOST并没有啥关系, HTTP的联机是TCP/IP建立的, 所以修改掉HOST HEADER并不会把包丢到另外一个服务器上。</code><br>当应用使用<code>$_SERVER[&#39;HTTP_HOST&#39;]</code>获取网站URL并拼接到找回密码的链接当中，就会产生漏洞。<br>当你使用网站密码重置功能，网站URL可能在将来会改变，所以要动态地生成一个邮箱找回密码的链接来匹配服务器的URL。这个时候可能就会使用<code>$_SERVER[&#39;HTTP_HOST&#39;]</code><br>Host header 是客户端提供的，意味着攻击者可以将他们自己的网址写到重置密码的邮件当中，威胁任意用户的账户安全。下面是一个攻击场景：</p>
+其实HTTP的联机与包里的HOST并没有啥关系, HTTP的联机是TCP/IP建立的, 所以修改掉HOST HEADER并不会把包丢到另外一个服务器上。</code><br>方便理解，这里要介绍一下HTTP_HOST和SERVER_NAME的区别： HTTP_HOST是从客户端获取的，用户可控，SERVER_NAME是从服务器配置文件获取的，如：<br><code>&lt;?php
+echo $_SERVER[&#39;SCRIPT_NAME&#39;].PHP_EOL;
+echo $_SERVER[&#39;HTTP_HOST&#39;].PHP_EOL;
+echo $_SERVER[&#39;SERVER_NAME&#39;];
+?&gt;</code><br>我服务器上的server_name是bugbountychina.com<br><img src="/2017/12/16/Host-Header欺骗在密码找回中的利用/servername.png" alt="image"><br><img src="/2017/12/16/Host-Header欺骗在密码找回中的利用/testhost.png" alt="image"><br>当应用使用<code>$_SERVER[&#39;HTTP_HOST&#39;]</code>获取网站URL并拼接到找回密码的链接当中，就会产生漏洞。<br>当你使用网站密码重置功能，网站URL可能在将来会改变，所以要动态地生成一个邮箱找回密码的链接来匹配服务器的URL。这个时候可能就会使用<code>$_SERVER[&#39;HTTP_HOST&#39;]</code><br>Host header 是客户端提供的，意味着攻击者可以将他们自己的网址写到重置密码的邮件当中，威胁任意用户的账户安全。下面是一个攻击场景：</p>
 <ol>
 <li>攻击者确认目标用户邮箱地址</li>
 <li>攻击者将重置密码请求中的host header设置成他们自己的网址</li>
@@ -951,7 +1097,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
