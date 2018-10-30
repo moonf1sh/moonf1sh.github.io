@@ -79,16 +79,23 @@
 
 
 
-<meta name="description" content="最近看到一个前辈说，优秀的人思想都是独立的，深以为然。循规蹈矩的人很难有什么创造力，最敏锐的心思，往往是从磨炼中来的。 离职之后轻松许多，大多数时间都在独处。独处是窥视内心最好的时候，如果感到空虚，必然会带来散漫，进一步就是消极。 有时候计划无法完成时往往会感到焦虑，然而达到目标的最好做法就是按部就班的做下去，过程比结">
+<meta name="description" content="六月份提交给先知的漏洞，不过重复了  版本信息：  注入点：http://localhost/dedecms/v57/dede/co_do.php?clshash=true&amp;amp;dopost=clear&amp;amp;ids=*  根据我们hook的函数发现payload直接进入查询语句sleep(1)s">
 <meta property="og:type" content="article">
-<meta property="og:title" content="关于工作、生活">
-<meta property="og:url" content="http://yoursite.com/2018/05/11/关于工作、生活/index.html">
+<meta property="og:title" content="DedeCMS V57 SQL注入">
+<meta property="og:url" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/index.html">
 <meta property="og:site_name" content="Moonfish&#39;s blog">
-<meta property="og:description" content="最近看到一个前辈说，优秀的人思想都是独立的，深以为然。循规蹈矩的人很难有什么创造力，最敏锐的心思，往往是从磨炼中来的。 离职之后轻松许多，大多数时间都在独处。独处是窥视内心最好的时候，如果感到空虚，必然会带来散漫，进一步就是消极。 有时候计划无法完成时往往会感到焦虑，然而达到目标的最好做法就是按部就班的做下去，过程比结果重要。 想了一些事情以后用来提升核心竞争力：  保持代码量，从开发的角度理解漏">
-<meta property="og:updated_time" content="2018-05-15T00:47:08.709Z">
+<meta property="og:description" content="六月份提交给先知的漏洞，不过重复了  版本信息：  注入点：http://localhost/dedecms/v57/dede/co_do.php?clshash=true&amp;amp;dopost=clear&amp;amp;ids=*  根据我们hook的函数发现payload直接进入查询语句sleep(1)sleep(2)sqlmap测试定位到.\dede\co_do.php文件中当$ids和$cl">
+<meta property="og:image" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/version.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/hook.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/sleep1.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/sleep2.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/sqlmap.png">
+<meta property="og:image" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/code.png">
+<meta property="og:updated_time" content="2018-10-30T15:37:36.591Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="关于工作、生活">
-<meta name="twitter:description" content="最近看到一个前辈说，优秀的人思想都是独立的，深以为然。循规蹈矩的人很难有什么创造力，最敏锐的心思，往往是从磨炼中来的。 离职之后轻松许多，大多数时间都在独处。独处是窥视内心最好的时候，如果感到空虚，必然会带来散漫，进一步就是消极。 有时候计划无法完成时往往会感到焦虑，然而达到目标的最好做法就是按部就班的做下去，过程比结果重要。 想了一些事情以后用来提升核心竞争力：  保持代码量，从开发的角度理解漏">
+<meta name="twitter:title" content="DedeCMS V57 SQL注入">
+<meta name="twitter:description" content="六月份提交给先知的漏洞，不过重复了  版本信息：  注入点：http://localhost/dedecms/v57/dede/co_do.php?clshash=true&amp;amp;dopost=clear&amp;amp;ids=*  根据我们hook的函数发现payload直接进入查询语句sleep(1)sleep(2)sqlmap测试定位到.\dede\co_do.php文件中当$ids和$cl">
+<meta name="twitter:image" content="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/version.png">
 
 
 
@@ -118,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/05/11/关于工作、生活/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/"/>
 
 
 
 
 
-  <title>关于工作、生活 | Moonfish's blog</title>
+  <title>DedeCMS V57 SQL注入 | Moonfish's blog</title>
   
 
 
@@ -231,7 +238,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/11/关于工作、生活/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="moonfish">
@@ -248,7 +255,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">关于工作、生活</h1>
+          <h1 class="post-title" itemprop="name headline">DedeCMS V57 SQL注入</h1>
         
 
         <div class="post-meta">
@@ -260,8 +267,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-11T14:11:09+08:00">
-                2018-05-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-30T23:23:22+08:00">
+                2018-10-30
               </time>
             
 
@@ -298,16 +305,7 @@
       
 
       
-        <p>最近看到一个前辈说，优秀的人思想都是独立的，深以为然。循规蹈矩的人很难有什么创造力，最敏锐的心思，往往是从磨炼中来的。</p>
-<p>离职之后轻松许多，大多数时间都在独处。独处是窥视内心最好的时候，如果感到空虚，必然会带来散漫，进一步就是消极。</p>
-<p>有时候计划无法完成时往往会感到焦虑，然而达到目标的最好做法就是按部就班的做下去，过程比结果重要。</p>
-<p>想了一些事情以后用来提升核心竞争力：</p>
-<ol>
-<li>保持代码量，从开发的角度理解漏洞</li>
-<li>技能的熟练度</li>
-<li>前瞻性，掌握某一领域未来发展方向</li>
-<li>多付出一点、多承担、多学习</li>
-</ol>
+        <p>  六月份提交给先知的漏洞，不过重复了<br>  版本信息：<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/version.png" alt="image"><br>  注入点：<code>http://localhost/dedecms/v57/dede/co_do.php?clshash=true&amp;dopost=clear&amp;ids=*</code><br>  根据我们hook的函数发现payload直接进入查询语句<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/hook.png" alt="image"><br>sleep(1)<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sleep1.png" alt="image"><br>sleep(2)<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sleep2.png" alt="image"><br>sqlmap测试<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/sqlmap.png" alt="image"><br>定位到<code>.\dede\co_do.php</code>文件中当$ids和$clshash不为空时，$ids直接拼接到查询语句执行<br><img src="/2018/10/30/DedeCMS-V57-SQL注入/code.png" alt="image"><br>IAST是个有趣的工具，还是需要不断研究的。</p>
 
       
     </div>
@@ -332,8 +330,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/12/18/IAST简述/" rel="next" title="IAST简述">
-                <i class="fa fa-chevron-left"></i> IAST简述
+              <a href="/2018/07/05/PocScan-无法加载bugscan插件的解决办法/" rel="next" title="PocScan 无法加载bugscan插件的解决办法">
+                <i class="fa fa-chevron-left"></i> PocScan 无法加载bugscan插件的解决办法
               </a>
             
           </div>
@@ -341,10 +339,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/06/01/好记性不如烂笔头/" rel="prev" title="好记性不如烂笔头">
-                好记性不如烂笔头 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
