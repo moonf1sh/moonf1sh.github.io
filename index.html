@@ -228,6 +228,147 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/30/webpack带来的安全风险/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="moonfish">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Moonfish's blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/30/webpack带来的安全风险/" itemprop="url">webpack带来的安全风险</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-01-30T10:29:38+08:00">
+                2019-01-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>最近在资产收集过程中，发现越来越多的vue应用，大部分会使用webpack进行打包，如果没有正确配置，就会导致vue源码泄露。</p>
+<p>webpack是一个JavaScript应用程序的静态资源打包器（module bundler）。它会递归构建一个依赖关系图（dependency graph）,其中包含应用程序需要的每个模块，然后将所有这些模块打包成一个或多个bundle。</p>
+<p>可以直接使用浏览器的调试模式进行查看，我们对vue的源码泄露并没有什么兴趣，感兴趣的是泄露的各种信息如API、加密算法、管理员邮箱、内部功能等等。下图泄露了全部的API。</p>
+<p><img src="/2019/01/30/webpack带来的安全风险/1.png" alt="image"></p>
+<p>很多vue应用都是先渲染页面再判断是否登陆，根据这个小缺陷，我们首先可以查看相关功能，或者利用Burpsuite修改验证用户的返回包，然后爬虫爬一下API，分析一下参数，偶尔会遇到没有权限验证的接口，或者会有注入、XSS之类的漏洞。</p>
+<p><img src="/2019/01/30/webpack带来的安全风险/2.png" alt="image"></p>
+<p>其他的文件也可以多留意一下</p>
+<p><img src="/2019/01/30/webpack带来的安全风险/3.png" alt="image"></p>
+<p>拼接URL,这个报错一看就是个thinkphp</p>
+<p><img src="/2019/01/30/webpack带来的安全风险/4.png" alt="image"></p>
+<p>构造一下请求：thinkphp5</p>
+<p><img src="/2019/01/30/webpack带来的安全风险/5.png" alt="image"></p>
+<p>最近的thinkphp代码执行</p>
+<p><img src="/2019/01/30/webpack带来的安全风险/6.png" alt="image"></p>
+<p>漏洞案例，大家根据文章和漏洞名称猜测一下思路：</p>
+<p>某碑分站权限控制不当进入运维管理系统</p>
+<p>某陌分站webpack配置不当进入后台</p>
+<p>其他的由于还未修复，就不说了。</p>
+<p>ref:</p>
+<p><a href="https://www.webpackjs.com/concepts/" title="https://www.webpackjs.com/concepts/" target="_blank" rel="noopener">https://www.webpackjs.com/concepts/</a></p>
+<p><a href="https://segmentfault.com/a/1190000008961395" title="谈谈我是如何获得知乎的前端源码的" target="_blank" rel="noopener">https://segmentfault.com/a/1190000008961395</a></p>
+<p><a href="https://www.cnblogs.com/liemei/p/7826202.html" title="vue.js使用webpack发布，部署到服务器上之后在浏览器中可以查看到vue文件源码" target="_blank" rel="noopener">https://www.cnblogs.com/liemei/p/7826202.html</a>（修复建议）</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/10/30/DedeCMS-V57-SQL注入/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1075,7 +1216,7 @@ echo $_SERVER[&#39;SERVER_NAME&#39;];
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">Artikel</span>
                 </a>
               </div>
@@ -1118,7 +1259,7 @@ echo $_SERVER[&#39;SERVER_NAME&#39;];
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
